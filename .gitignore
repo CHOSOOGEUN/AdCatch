@@ -1,2 +1,6 @@
 *.pptx
 사무/
+ai/dataset/
+.DS_Store
+__pycache__/
+*.pyc
