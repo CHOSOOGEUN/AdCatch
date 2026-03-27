@@ -7,7 +7,7 @@
 - [x] `backend/.env` 작성 후 `docker-compose up -d` → 서버 정상 실행 확인 (완료: 2026-03-27)
 - [x] `http://localhost:8000/docs` 에서 전 엔드포인트 동작 확인 (정상 응답 확인)
 - [ ] Alembic 세팅 → `alembic upgrade head` 로 테이블 생성 (현재 `Base.metadata.create_all`로 임시 생성됨)
-- [ ] `get_current_admin` 의존성 함수 작성 → 주요 라우트에 JWT 인증 적용
+- [x] `get_current_admin` 의존성 함수 작성 → 주요 라우트에 JWT 인증 적용 (완료: 2026-03-27 V2 최적화)
 - [ ] 이벤트 생성 시 `manager.broadcast()` 호출 → WebSocket 실시간 전송 연결
 
 ---
