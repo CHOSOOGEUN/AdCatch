@@ -1,33 +1,39 @@
 import json
+from typing import Any
+
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from typing import Set
 
-router = APIRouter()
-
-# 연결된 WebSocket 클라이언트 목록
-active_connections: Set[WebSocket] = set()
+router = APIRouter(tags=["websocket"])
 
 
-@router.websocket("/alerts")
-async def websocket_endpoint(websocket: WebSocket):
-    """역무원 대시보드와의 실시간 알림 연결"""
-    await websocket.accept()
-    active_connections.add(websocket)
+class ConnectionManager:
+    def __init__(self):
+        self._connections: list[WebSocket] = []
+
+    async def connect(self, ws: WebSocket):
+        await ws.accept()
+        self._connections.append(ws)
+
+    def disconnect(self, ws: WebSocket):
+        self._connections.remove(ws)
+
+    async def broadcast(self, data: dict[str, Any]):
+        message = json.dumps(data, ensure_ascii=False, default=str)
+        for ws in list(self._connections):
+            try:
+                await ws.send_text(message)
+            except Exception:
+                self._connections.remove(ws)
+
+
+manager = ConnectionManager()
+
+
+@router.websocket("/ws/events")
+async def websocket_events(ws: WebSocket):
+    await manager.connect(ws)
     try:
         while True:
-            # 클라이언트로부터의 메시지 수신 (ping/pong 등)
-            await websocket.receive_text()
+            await ws.receive_text()  # keep-alive ping 수신
     except WebSocketDisconnect:
-        active_connections.discard(websocket)
-
-
-async def broadcast_event(message: dict):
-    """감지 이벤트를 모든 연결된 클라이언트에 브로드캐스트"""
-    disconnected = set()
-    for connection in active_connections:
-        try:
-            await connection.send_text(json.dumps(message, ensure_ascii=False))
-        except Exception:
-            disconnected.add(connection)
-    # 끊어진 연결 제거
-    active_connections.difference_update(disconnected)
+        manager.disconnect(ws)

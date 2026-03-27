@@ -1,7 +1,42 @@
-*.pptx
-사무/
-ai/dataset/
-.DS_Store
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+
+# Environment
 .env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+.next/
+dist/
+
+# Docker
+*.log
+
+# AI models
+*.pt
+*.pth
+*.onnx
+weights/

@@ -1,71 +1,67 @@
-import uuid
 from datetime import datetime
-from typing import Optional
+
 from pydantic import BaseModel, EmailStr
 
 
-# ─── Auth ────────────────────────────────────────────────────────────────────
-class LoginRequest(BaseModel):
+# ── Auth ──────────────────────────────────────────────────────────────────────
+
+class AdminLogin(BaseModel):
     email: EmailStr
     password: str
+
 
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
 
-# ─── Camera ──────────────────────────────────────────────────────────────────
+# ── Camera ────────────────────────────────────────────────────────────────────
+
 class CameraCreate(BaseModel):
     location: str
     station_name: str
 
+
 class CameraResponse(BaseModel):
-    id: uuid.UUID
+    id: int
     location: str
     station_name: str
     is_active: bool
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 
-# ─── Event ───────────────────────────────────────────────────────────────────
+# ── Event ─────────────────────────────────────────────────────────────────────
+
 class EventCreate(BaseModel):
-    camera_id: uuid.UUID
-    track_id: Optional[int] = None
-    confidence: Optional[float] = None
-    clip_url: Optional[str] = None
+    camera_id: int
+    clip_url: str | None = None
+    track_id: int | None = None
+    confidence: float | None = None
+
 
 class EventResponse(BaseModel):
-    id: uuid.UUID
-    camera_id: uuid.UUID
+    id: int
+    camera_id: int
     timestamp: datetime
-    clip_url: Optional[str]
-    track_id: Optional[int]
-    confidence: Optional[float]
+    clip_url: str | None
+    track_id: int | None
+    confidence: float | None
     status: str
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 
-# ─── Notification ─────────────────────────────────────────────────────────────
+class EventStatusUpdate(BaseModel):
+    status: str  # confirmed | dismissed
+
+
+# ── Notification ──────────────────────────────────────────────────────────────
+
 class NotificationResponse(BaseModel):
-    id: uuid.UUID
-    event_id: uuid.UUID
+    id: int
+    event_id: int
     sent_at: datetime
-    read_at: Optional[datetime]
+    read_at: datetime | None
 
-    class Config:
-        from_attributes = True
-
-
-# ─── WebSocket 메시지 ──────────────────────────────────────────────────────────
-class WSEventMessage(BaseModel):
-    type: str = "fare_evasion_detected"
-    event_id: str
-    camera_id: str
-    station_name: str
-    timestamp: str
-    confidence: Optional[float]
-    clip_url: Optional[str]
+    model_config = {"from_attributes": True}
