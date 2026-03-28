@@ -20,13 +20,14 @@
 
 ---
 
-## 이동근 · 최태양 (인프라)
-- [ ] AWS EC2 생성 (Ubuntu 22.04) + 보안 그룹 포트 설정 (22, 80, 443, 8000)
-- [ ] EC2에 Docker + Docker Compose 설치
-- [ ] 레포 clone 후 `docker-compose up -d` 실행 → EC2에서 서버 뜨는지 확인
-- [ ] `http://EC2주소:8000/docs` 접속 확인 후 팀 공유
+## 이동근 · 최태양 (인프라) 🚀 [완료]
+- [x] AWS EC2 생성 (Ubuntu 24.04 LTS) + 보안 그룹 포트 설정 (22, 80, 8000) (완료: 2026-03-28)
+- [x] EC2 서버 환경에 Docker + Docker Compose 설치 완료
+- [x] `docker-compose up -d --build` 실행 → EC2 위에서 백엔드 앱 가동 확인
+- [x] `http://15.135.92.86:8000/docs` 접속 확인 및 팀 공유 성공
+- [x] **GitHub Actions CI/CD 파이프라인 구축 및 자동 배포 연동** (완료: 2026-03-28)
 
-> Nginx, HTTPS, CI/CD는 다음 주에
+> Nginx, HTTPS는 다음 주에 (CI/CD는 이번 주에 미리 해결!)
 
 ---
 
