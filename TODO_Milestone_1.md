@@ -26,7 +26,7 @@
 - [x] `docker-compose up -d --build` 실행 → EC2 위에서 백엔드 앱 가동 확인
 - [x] `http://15.135.92.86:8000/docs` 접속 확인 및 팀 공유 성공
 - [x] **GitHub Actions CI/CD 파이프라인 구축 및 자동 배포 연동** (완료: 2026-03-28)
-- [ ] **[최태양] AWS S3 버킷 생성 및 백엔드 연동용 IAM Key 발급** (최우선!)
+- [x] **[최태양] AWS S3 버킷 생성 및 백엔드 연동용 IAM Key 발급** (최우선!)
 - [ ] **[최태양] Nginx 리버스 프록시 + Let's Encrypt HTTPS(SSL) 적용**
 - [ ] **[최태양] Docker Log Rotation 설정 (서버 디스크 고갈 방지)**
 
