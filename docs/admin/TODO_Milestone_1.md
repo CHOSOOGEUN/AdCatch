@@ -13,10 +13,10 @@
 ---
 
 ## 김민지 (DB)
-- [ ] DB 컨테이너 접속 후 TimescaleDB 확장 활성화 + `events` 하이퍼테이블 변환
+- [x] DB 컨테이너 접속 후 TimescaleDB 확장 활성화 + `events` 하이퍼테이블 변환 (**완료: 2026-03-30**)
 - [x] Alembic `env.py` async 엔진 연결 (조수근과 함께 완료: 2026-03-27)
-- [ ] `seed.py` 작성 → 관리자 계정 + 테스트 카메라 데이터 삽입
-- [ ] Swagger에서 로그인 → 이벤트 생성까지 흐름 확인
+- [x] `seed.py` 작성 → 관리자 계정 + 테스트 카메라 데이터 삽입 (**완료: 2026-03-30**)
+- [x] Swagger에서 로그인 → 이벤트 생성까지 흐름 확인 (**완료: 2026-03-30**)
 
 ---
 
@@ -26,19 +26,19 @@
 - [x] `docker-compose up -d --build` 실행 → EC2 위에서 백엔드 앱 가동 확인
 - [x] `http://15.135.92.86:8000/docs` 접속 확인 및 팀 공유 성공
 - [x] **GitHub Actions CI/CD 파이프라인 구축 및 자동 배포 연동** (완료: 2026-03-28)
-- [ ] **[최태양] AWS S3 버킷 생성 및 백엔드 연동용 IAM Key 발급** (최우선!)
-- [ ] **[최태양] Nginx 리버스 프록시 + Let's Encrypt HTTPS(SSL) 적용**
-- [ ] **[최태양] Docker Log Rotation 설정 (서버 디스크 고갈 방지)**
+- [x] **[최태양] AWS S3 버킷 생성 및 백엔드 연동용 IAM Key 발급** (완료: 2026-03-30)
+- [ ] **[최태양] Nginx 리버스 프록시 + Let's Encrypt HTTPS(SSL) 적용** (M2 이관)
+- [ ] **[최태양] Docker Log Rotation 설정 (서버 디스크 고갈 방지)** (M2 이관)
 
 > Nginx, HTTPS는 다음 주에 (CI/CD는 이번 주에 미리 해결!)
 
 ---
 
-## 이지현 · 김유진 · 양은혜 (프론트엔드)
-- [ ] Vite + React + TypeScript + Tailwind + Shadcn UI 초기 세팅
-- [ ] axios 인스턴스 + React Router 기본 설정
-- [ ] 로그인 페이지 → `POST /api/auth/login` 연결 + 토큰 저장
-- [ ] 로그인 후 대시보드 레이아웃 (사이드바 + 헤더) 구성
+## 이지현 · 김유진 · 양은혜 (프론트엔드) 🏆 [완료]
+- [x] Vite + React + TypeScript + Tailwind + Shadcn UI 초기 세팅 (**완료: 2026-03-30**)
+- [x] axios 인스턴스 + React Router 기본 설정 (**완료: 2026-03-30**)
+- [x] 로그인 페이지 → `POST /api/auth/login` 연결 + 토큰 저장 (**완료: 2026-03-30**)
+- [x] 로그인 후 대시보드 레이아웃 (사이드바 + 헤더) 구성 (**완료: 2026-03-30**)
 
 > 이벤트/카메라 페이지는 다음 주에
 
