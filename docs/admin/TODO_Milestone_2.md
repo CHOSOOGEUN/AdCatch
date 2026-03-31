@@ -1,4 +1,4 @@
-# 🛰️ GateGuard — Milestone 2.0 (3/31 ~ 4/15) - “High-Intensity Blitz” 목표
+# 🛰️ GateGuard — Milestone 2.0 (3/31 ~ 4/10) - “High-Intensity Blitz” 목표
 
 > **전략적 지침**: 시험 기간(4월 중순) 동안 개발이 일시 중단될 것을 대비하여, 시스템의 모든 핵심 기능을 “완전 자동화” 및 “통합 완료”하여 서비스가 자가 가동되도록 함. (High Workload & Goal-Oriented)
 
