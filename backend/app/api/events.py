@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,8 +16,8 @@ router = APIRouter(prefix="/events", tags=["events"])
 
 @router.get("/", response_model=list[EventResponse])
 async def list_events(
-    camera_id: int | None = None,
-    status: str | None = None,
+    camera_id: Optional[int] = None,
+    status: Optional[str] = None,
     limit: int = 50,
     db: AsyncSession = Depends(get_db),
     current_admin: Admin = Depends(get_current_admin)

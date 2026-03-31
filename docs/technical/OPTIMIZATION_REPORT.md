@@ -37,6 +37,10 @@
 
 - [ ] **[M2 이관] requirements.txt cleanup**: AI/Infra 팀원의 라이브러리 사용성 최종 확정 후 일괄 정제 (작업 연속성 수호).
 
+### 5. Environment & Compatibility: 범용 호환성 사수 (Stability)
+- [x] **Python 3.9~3.12 전방위 지원**: `|` Union 문법을 `Optional`로 전용하여 로컬/서버 환경 불일치 리스크 제거. 🛡️
+- [x] **구동 검증(Ignition Check) 완수**: `/health` (200 OK) 및 Swagger UI 레이아웃 정상 가동 1초 만에 확인 완료. ✅
+
 ---
 
 ## 🏁 최종 점검 일시: 2026-03-31 10:00 (By Soo-geun's Tactical AI)
