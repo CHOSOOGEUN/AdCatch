@@ -18,23 +18,25 @@
 ## 🚀 영역별 세부 작업 내역 (Action Items)
 
 ### 1. Backend: 정밀 튜닝 (Refinement)
+
 - [x] **Global Exception Handler 보강**: 모든 500 에러를 `{ "success": false, "message": "...", "detail": "..." }` 포맷으로 통일. 🛡️
 - [x] **Type Hints & Docstrings 이식**: `main.py`, `models.py`, `schemas.py`의 모든 함수에 사양 정보 명시.
 - [x] **Import Cleanup**: 쓰이지 않는 더미 코드 및 라이브러리 소멸.
 
 ### 2. Database: 시계열 성능 사수 (Performance)
+
 - [x] **Index 정밀 분석**: `events` 테이블에 `camera_id`와 `timestamp` 복합 인덱스 누락 여부 최종 확인. 🛢️
 - [ ] **[M2 이관] Hypertable Retention Policy**: 데이터 실사용량 분석 및 팀장 최종 승인 후 설정 (안정성 보장).
 
 ### 3. Documentation: 지식 보관소 통합 (Docs Structure)
+
 - [x] **`docs/technical/`** 하위에 모든 `...GUIDE.md` 통합 관리.
 - [x] **`README.md`** 최신화: M1 통합 완료 및 M2 목표 전면 노출. 📑
 
 ### 4. Dependency: 보급망 정예화 (Environment)
+
 - [ ] **[M2 이관] requirements.txt cleanup**: AI/Infra 팀원의 라이브러리 사용성 최종 확정 후 일괄 정제 (작업 연속성 수호).
 
 ---
 
 ## 🏁 최종 점검 일시: 2026-03-31 10:00 (By Soo-geun's Tactical AI)
-
-> "우리는 팀원들에게 지장을 주지 않으면서도, 그들의 무기가 가장 날카롭게 빛나도록 엔진을 닦아놓았습니다." 🕵️‍♂️🛡️⚔️🤴
