@@ -27,8 +27,8 @@
 - [x] `http://15.135.92.86:8000/docs` 접속 확인 및 팀 공유 성공
 - [x] **GitHub Actions CI/CD 파이프라인 구축 및 자동 배포 연동** (완료: 2026-03-28)
 - [x] **[최태양] AWS S3 버킷 생성 및 백엔드 연동용 IAM Key 발급** (완료: 2026-03-30)
-- [x] **[최태양] Nginx 리버스 프록시 + Let's Encrypt HTTPS(SSL) 적용** (M2 이관 준비 완료)
-- [x] **[최태양] Docker Log Rotation 설정 (서버 디스크 고갈 방지)** (M2 이관 준비 완료)
+- [x] **[최태양] Nginx 리버스 프록시 + Let's Encrypt HTTPS(SSL) 적용** (M2 이관 완료)
+- [x] **[최태양] Docker Log Rotation 설정 (서버 디스크 고갈 방지)** (M2 이관 완료)
 
 ---
 
@@ -40,14 +40,14 @@
 
 ---
 
-## 윤효정 (AI)
-- [ ] `pip install ultralytics supervision opencv-python httpx` 설치
-- [ ] `python ai/inference.py` 실행 → 웹캠에서 사람 감지 + 바운딩 박스 확인
-- [ ] 같은 사람 이동 시 tracker ID 유지되는지 확인
-- [ ] 얼굴 블러 동작 확인
-- [ ] 테스트 영상 기준으로 Line Crossing 좌표 맞게 조정
+## 윤효정 (AI) 🚧 [M2 전격 이관]
+- [ ] **[M2 이관]** `pip install ultralytics supervision opencv-python httpx` 설치
+- [ ] **[M2 이관]** `python ai/inference.py` 실행 → 웹캠에서 사람 감지 + 바운딩 박스 확인
+- [ ] **[M2 이관]** 같은 사람 이동 시 tracker ID 유지되는지 확인
+- [ ] **[M2 이관]** 얼굴 블러 동작 확인
+- [ ] **[M2 이관]** 테스트 영상 기준으로 Line Crossing 좌표 맞게 조정
 
-> 데이터셋 다운로드 신청은 병행으로 걸어두기 (M2 집중 타겟)
+> **사유**: 테스트 영상 부재 및 M2 "Blitz Integration" 집중을 위한 전략적 선후관계 조정 (2026-03-31)
 
 ---
 
@@ -58,5 +58,5 @@ master (통합 거점) 🛡️
 ├── feature/김민지-db-setup (PR #10)     <-- 🏁 완료
 ├── feature/이동근-infra-cicd           <-- 🏁 완료
 ├── feature/이지현-dashboard-ui         <-- 🏁 완료
-└── feature/윤효정-yolo-pipeline        <-- 🚧 진행 중
+└── feature/윤효정-yolo-pipeline        <-- 🚧 M2 집중 타겟
 ```
