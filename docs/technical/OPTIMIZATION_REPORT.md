@@ -24,14 +24,14 @@
 
 ### 2. Database: 시계열 성능 사수 (Performance)
 - [x] **Index 정밀 분석**: `events` 테이블에 `camera_id`와 `timestamp` 복합 인덱스 누락 여부 최종 확인. 🛢️
-- [ ] **Hypertable Retention Policy 시뮬레이션**: 데이터 무제한 증가 방지를 위한 보관 주기(Retention) 정책 초안 수립.
+- [ ] **[M2 이관] Hypertable Retention Policy**: 데이터 실사용량 분석 및 팀장 최종 승인 후 설정 (안정성 보장).
 
 ### 3. Documentation: 지식 보관소 통합 (Docs Structure)
 - [x] **`docs/technical/`** 하위에 모든 `...GUIDE.md` 통합 관리.
 - [x] **`README.md`** 최신화: M1 통합 완료 및 M2 목표 전면 노출. 📑
 
 ### 4. Dependency: 보급망 정예화 (Environment)
-- [ ] `pip freeze > requirements.txt` 대신, 핵심 패키지만 명문화하여 관리 효율 증대.
+- [ ] **[M2 이관] requirements.txt cleanup**: AI/Infra 팀원의 라이브러리 사용성 최종 확정 후 일괄 정제 (작업 연속성 수호).
 
 ---
 
