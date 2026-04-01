@@ -122,9 +122,12 @@ class FarewellEvasionDetector:
         return annotated
 
     async def run(self, source: int | str = 0):
-        cap = cv2.VideoCapture(source)
+        """실시간 스트림 실행 (source: 카메라 인덱스 또는 RTSP URL)"""
+        cap = cv2.VideoCapture(source)  # Mac/Linux 기본. Windows에서 카메라 안 뜨면 아래 줄로 교체
+        # cap = cv2.VideoCapture(source, cv2.CAP_DSHOW)  # Windows 전용
+
         print(f"\n💎 [GATE GUARD] M2 AI INFERENCE LIVE ARMED")
-        
+        print(f"[GateGuard] 추론 시작 — 카메라 ID: {self.config.camera_id}")
         try:
             while cap.isOpened():
                 ret, frame = cap.read()
