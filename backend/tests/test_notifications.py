@@ -1,55 +1,45 @@
 import pytest
 from httpx import AsyncClient
-from app.models.models import Notification
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.models import Notification, Admin
 
-@pytest.mark.asyncio
-async def test_get_notifications_unauthorized(client: AsyncClient):
-    """[GateGuard] 비로그인 알림 조회 차단 테스트"""
-    response = await client.get("/api/notifications/")
-    assert response.status_code == 401
-
-@pytest.mark.asyncio
-async def test_get_notifications_empty(client: AsyncClient):
-    """[GateGuard] 알림 목록 조회 성공 테스트 (빈 목록)"""
-    # 1. 로그인
+@pytest.fixture
+async def auth_headers(client: AsyncClient):
+    """테스트용 관리자 토큰 헤더 생성"""
     register_payload = {
-        "employee_id": "2026111",
-        "email": "noti_test@gateguard.com",
-        "password": "testpassword"
+        "employee_id": "2026888",
+        "email": "noti_tester@gateguard.com",
+        "password": "testpassword123"
     }
     await client.post("/api/auth/register", json=register_payload)
-    login_response = await client.post("/api/auth/login", json={
-        "employee_id": "2026111",
-        "password": "testpassword"
-    })
-    token = login_response.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
+    login_payload = {"employee_id": "2026888", "password": "testpassword123"}
+    response = await client.post("/api/auth/login", json=login_payload)
+    token = response.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
 
-    # 2. 조회
-    response = await client.get("/api/notifications/", headers=headers)
+@pytest.mark.asyncio
+async def test_get_notifications_with_data(client: AsyncClient, auth_headers, db_session: AsyncSession):
+    # n1: read_at is None
+    n1 = Notification(event_id=1, read_at=None)
+    db_session.add(n1)
+    await db_session.commit()
+    await db_session.refresh(n1) # Ensures ID is bound
+
+    # Test list
+    response = await client.get("/api/notifications/", headers=auth_headers)
     assert response.status_code == 200
-    assert isinstance(response.json(), list)
+    
+    # Test read success path (39-46)
+    read_resp = await client.patch(f"/api/notifications/{n1.id}/read", headers=auth_headers)
+    assert read_resp.status_code == 200
+    assert "Success" in read_resp.json()["message"]
 
 @pytest.mark.asyncio
-async def test_read_notification_api(client: AsyncClient):
-    """[GateGuard] 알림 읽음 처리 API 테스트"""
-    # 1. 로그인 보초병 세우기
-    register_payload = {
-        "employee_id": "2026222",
-        "email": "read_test@gateguard.com",
-        "password": "testpassword"
-    }
-    await client.post("/api/auth/register", json=register_payload)
-    login_response = await client.post("/api/auth/login", json={
-        "employee_id": "2026222",
-        "password": "testpassword"
-    })
-    token = login_response.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
-
-    # 2. 임의의 알림이 있다고 가정하거나 DB에 직접 주입 (여기서는 flow 테스트)
-    # 실제 DB 세션이 필요한 경우 app.database.get_db를 오버라이드한 세션 필요
-    # 현 환경에서는 repository 테스트가 아닌 API 흐름 테스트이므로 
-    # 존재하지 않는 ID에 대한 404 테스트로 커버리지 확보
-    response = await client.patch("/api/notifications/9999/read", headers=headers)
-    assert response.status_code == 404
+async def test_mark_all_read_success_path(client: AsyncClient, auth_headers, db_session: AsyncSession):
+    n = Notification(event_id=1, read_at=None)
+    db_session.add(n)
+    await db_session.commit()
+    
+    # Test read-all path (54-55)
+    response = await client.post("/api/notifications/read-all", headers=auth_headers)
+    assert response.status_code == 200

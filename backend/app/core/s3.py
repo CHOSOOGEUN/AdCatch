@@ -62,5 +62,22 @@ class S3Client:
             logger.error(f"❌ [S3 ERROR] AWS Client Error: {str(e)}")
             return ""
 
+    def get_presigned_url(self, s3_file_name: str, expires_in: int = 3600) -> str:
+        """S3 객체에 접근할 수 있는 기간 한정 URL을 생성합니다."""
+        if not self.is_configured:
+            # 🐯 [코순이 Tip] 시뮬레이션 모드: 가상 URL 발급
+            return f"https://{self.bucket_name}.s3.{self.region}.amazonaws.com/simulated/{s3_file_name}"
+
+        try:
+            url = self.client.generate_presigned_url(
+                'get_object',
+                Params={'Bucket': self.bucket_name, 'Key': s3_file_name},
+                ExpiresIn=expires_in
+            )
+            return url
+        except ClientError as e:
+            logger.error(f"❌ [S3 ERROR] Failed to generate presigned URL: {str(e)}")
+            return ""
+
 # 싱글톤 인스턴스
 s3_client = S3Client()

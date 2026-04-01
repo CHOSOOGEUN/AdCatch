@@ -15,6 +15,9 @@ class Admin(Base):
     employee_id: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     email: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     password: Mapped[str] = mapped_column(String, nullable=False)
+    role: Mapped[str] = mapped_column(String, default="viewer") # super_admin | station_manager | viewer
+    station_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
 
@@ -39,6 +42,7 @@ class Event(Base):
     track_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     confidence: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     status: Mapped[str] = mapped_column(String, default="pending")  # pending | confirmed | dismissed
+    event_type: Mapped[str] = mapped_column(String, default="unknown")  # tag_fail | jump | emergency_door
     handled_by: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("admins.id"), nullable=True)
     handled_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 

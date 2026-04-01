@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, ORJSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import auth, cameras, events, notifications, websocket
@@ -24,16 +24,17 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
+    default_response_class=ORJSONResponse, # [GateGuard] 고성능 orjson 엔진 채택
 )
 
 
 @app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+async def global_exception_handler(request: Request, exc: Exception) -> ORJSONResponse:
     """
     [GateGuard] 서버 전역 예외 처리기
     - 예기치 못한 에러(500) 발생 시 프론트엔드가 인지할 수 있도록 표준 JSON 포맷을 반환합니다.
     """
-    return JSONResponse(
+    return ORJSONResponse(
         status_code=500,
         content={
             "success": False,
