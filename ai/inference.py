@@ -100,7 +100,7 @@ class FarewellEvasionDetector:
         results = self.model(clean_frame, verbose=False)
         detections = sv.Detections.from_ultralytics(results[0])
         # 사람만 필터링
-        detections = detections[(detections.class_id == 0) & (detections.confidence >= self.config.threshold if hasattr(self.config, 'threshold') else 0.5)]
+        detections = detections[(detections.class_id == 0) & (detections.confidence >= self.config.confidence_threshold)]
         detections = self.tracker.update(detections)
 
         # 트리거 확인

@@ -36,7 +36,7 @@
 
 - [x] **Docker Log Rotation & Disk 관리**: 디스크 고갈 방지를 위한 10MB 기준 로그 순환 및 임시 파일 자동 삭제 설정 완료 (PR #14) 🐳
 - [x] **PostgreSQL(TimescaleDB) 자동 백업 체계**: S3를 이용한 일일 DB 덤프 자동화 및 복구 스크립트 검증 완료 (PR #14) 🗄️🛡️
-- [x] **Nginx Reverse Proxy & SSL 완비**: <https://gateguardsystems.com> 도메인 연동 및 Certbot SSL 인증서 발급 완료 🔐
+- [x] **Nginx Reverse Proxy & SSL 완비**: https://gateguardsystems.com 도메인 연동 및 Certbot SSL 인증서 발급 완료 🔐
 - [x] **서버 리소스 자가 모니터링**: CPU/Memory 임계치 초과 시 팀장에게 즉시 알림 발송 설정 완료 (scripts/monitor.sh 반영) 📊
 
 ---
