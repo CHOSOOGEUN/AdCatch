@@ -83,7 +83,7 @@ function FilterSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none bg-white border border-gray-200 rounded-full pl-4 pr-8 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#4B73F7] cursor-pointer"
+        className="appearance-none bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-full pl-4 pr-8 py-2 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4B73F7] cursor-pointer"
       >
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
@@ -118,14 +118,14 @@ export default function EventsFilter({
   return (
     <div className="flex items-center gap-2 flex-wrap">
       {/* 텍스트 검색 */}
-      <div className="relative shrink-0">
+      <div className="relative w-full sm:w-72 shrink-0">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           type="text"
           value={filters.search}
           onChange={(e) => update({ search: e.target.value })}
           placeholder="EV-번호, 역이름, 게이트, CAM-번호 검색..."
-          className="pl-9 pr-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4B73F7] w-72"
+          className="w-full pl-9 pr-4 py-2 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4B73F7]"
         />
       </div>
 

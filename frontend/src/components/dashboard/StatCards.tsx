@@ -31,7 +31,7 @@ export default function StatCards({ stats, loading }: StatCardsProps) {
         {[...Array(4)].map((_, i) => (
           <div
             key={i}
-            className="flex-1 bg-white rounded-2xl px-6 py-5 shadow-sm animate-pulse h-24"
+            className="flex-1 bg-white dark:bg-gray-800 rounded-2xl px-3 lg:px-6 py-4 lg:py-5 shadow-sm animate-pulse h-16 lg:h-24"
           />
         ))}
       </div>

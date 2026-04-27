@@ -84,8 +84,8 @@ function ListItem({
       onClick={onClick}
       className={`w-full text-left p-2.5 rounded-xl transition ${
         isSelected
-          ? "bg-red-50 border border-red-300"
-          : "hover:bg-gray-50 border border-transparent"
+          ? "bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700"
+          : "hover:bg-gray-50 dark:hover:bg-gray-700 border border-transparent"
       }`}
     >
       {/* 썸네일 */}
@@ -108,7 +108,7 @@ function ListItem({
         />
       </div>
       {/* 이벤트 정보 */}
-      <p className="text-xs text-gray-700 leading-tight">
+      <p className="text-xs text-gray-700 dark:text-gray-300 leading-tight">
         <span className="font-semibold">Event #{event.id}</span>
         {" | "}
         {formatHMS(event.timestamp)}
@@ -171,14 +171,14 @@ export default function EventDetailModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl flex overflow-hidden w-full max-w-4xl mx-4"
-        style={{ maxHeight: "90vh" }}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex overflow-hidden w-full max-w-4xl mx-2 sm:mx-4"
+        style={{ maxHeight: "92vh" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* ── 좌측: 실시간 알림 목록 ── */}
-        <div className="w-56 shrink-0 border-r border-gray-100 flex flex-col">
-          <div className="px-4 py-4 border-b border-gray-100">
-            <h3 className="font-bold text-gray-900 text-sm">실시간 알림</h3>
+        {/* ── 좌측: 실시간 알림 목록 (md 미만 숨김) ── */}
+        <div className="hidden md:flex w-56 shrink-0 border-r border-gray-100 dark:border-gray-700 flex-col">
+          <div className="px-4 py-4 border-b border-gray-100 dark:border-gray-700">
+            <h3 className="font-bold text-gray-900 dark:text-white text-sm">실시간 알림</h3>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-1">
             {events.length === 0 ? (
@@ -201,11 +201,11 @@ export default function EventDetailModal({
         {/* ── 우측: 상세 정보 ── */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* 헤더 */}
-          <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 gap-3">
+          <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-gray-700 gap-3">
             <div className="flex items-center gap-2 min-w-0">
-              <h2 className="text-sm font-bold text-gray-900 truncate">
+              <h2 className="text-sm font-bold text-gray-900 dark:text-white truncate">
                 Event #{selected.id}
-                <span className="font-normal text-gray-500">
+                <span className="font-normal text-gray-500 dark:text-gray-400">
                   {" "}
                   | {formatHMS(selected.timestamp)} | {getGateLabel(selected)} |
                   STATUS:{" "}
@@ -214,7 +214,7 @@ export default function EventDetailModal({
                   className={
                     selected.status === "pending"
                       ? "text-red-500"
-                      : "text-gray-500"
+                      : "text-gray-500 dark:text-gray-400"
                   }
                 >
                   {getStatusText(selected.status)}
@@ -228,9 +228,9 @@ export default function EventDetailModal({
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition shrink-0"
+              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition shrink-0"
             >
-              <X className="w-4 h-4 text-gray-500" />
+              <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
 
@@ -253,23 +253,23 @@ export default function EventDetailModal({
             </div>
 
             {/* 정보 + 버튼 */}
-            <div className="w-52 shrink-0 flex flex-col justify-between p-5 border-l border-gray-100 overflow-y-auto">
+            <div className="w-40 sm:w-52 shrink-0 flex flex-col justify-between p-3 sm:p-5 border-l border-gray-100 dark:border-gray-700 overflow-y-auto">
               {/* 정보 섹션 */}
               <div className="space-y-3">
-                <div className="flex items-start gap-2 text-sm text-gray-700">
-                  <Clock className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                  <Clock className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-xs text-gray-400 mb-0.5">기록시각</p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">기록시각</p>
                     <p className="font-medium">
                       {formatHMS(selected.timestamp)}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-2 text-sm text-gray-700">
-                  <MapPin className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                  <MapPin className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-xs text-gray-400 mb-0.5">위치</p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">위치</p>
                     <p className="font-medium">{locationText}</p>
                   </div>
                 </div>
@@ -277,16 +277,16 @@ export default function EventDetailModal({
                 {selected.appearance_tags &&
                   selected.appearance_tags.length > 0 && (
                     <div className="flex items-start gap-2">
-                      <Tag className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+                      <Tag className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-xs text-gray-400 mb-1.5">인상착의</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mb-1.5">인상착의</p>
                         <ul className="space-y-1">
                           {selected.appearance_tags.map((tag) => (
                             <li
                               key={tag}
-                              className="flex items-center gap-1.5 text-sm text-gray-700"
+                              className="flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300"
                             >
-                              <span className="w-1.5 h-1.5 rounded-full bg-gray-400 shrink-0" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 shrink-0" />
                               {tag}
                             </li>
                           ))}
@@ -296,10 +296,10 @@ export default function EventDetailModal({
                   )}
 
                 {(selected.event_type ?? selected.description) && (
-                  <div className="flex items-start gap-2 text-sm text-gray-700">
-                    <Zap className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                    <Zap className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-xs text-gray-400 mb-0.5">감지유형</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">감지유형</p>
                       <p className="font-medium">
                         {selected.event_type ?? selected.description}
                       </p>
@@ -308,7 +308,7 @@ export default function EventDetailModal({
                 )}
 
                 {selected.confidence !== null && (
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-gray-400 dark:text-gray-500">
                     AI 신뢰도: {Math.round((selected.confidence ?? 0) * 100)}%
                   </p>
                 )}
@@ -317,7 +317,7 @@ export default function EventDetailModal({
               {/* 액션 버튼 */}
               {isActive && (
                 <div className="mt-5 space-y-2">
-                  <p className="text-xs text-gray-400 font-medium mb-1">
+                  <p className="text-xs text-gray-400 dark:text-gray-500 font-medium mb-1">
                     다음 버튼
                   </p>
                   <button

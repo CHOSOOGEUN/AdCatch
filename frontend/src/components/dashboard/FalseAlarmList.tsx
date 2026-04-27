@@ -51,9 +51,9 @@ export default function FalseAlarmList({
   loading,
 }: FalseAlarmListProps) {
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-bold text-gray-900">최근 오탐 신고</h2>
+        <h2 className="font-bold text-gray-900 dark:text-white">최근 오탐 신고</h2>
         <Link to="/events" className="text-xs text-[#4B73F7] hover:underline">
           전체보기
         </Link>
@@ -62,7 +62,7 @@ export default function FalseAlarmList({
       {loading ? (
         <div className="space-y-3">
           {[...Array(2)].map((_, i) => (
-            <div key={i} className="h-12 bg-gray-100 rounded animate-pulse" />
+            <div key={i} className="h-12 bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
           ))}
         </div>
       ) : notifications.length === 0 ? (
@@ -87,10 +87,10 @@ export default function FalseAlarmList({
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm text-gray-800 font-medium leading-tight">
+                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium leading-tight">
                     {getLabel(n)}
                   </p>
-                  <p className="text-xs text-gray-400 mt-0.5">
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                     {formatRelativeTime(n.sent_at)} ·{" "}
                     {isResolved ? "오탐 확인" : "검토 중"}
                   </p>

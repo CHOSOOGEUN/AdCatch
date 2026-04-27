@@ -40,9 +40,9 @@ function getCountColor(count: number): string {
 
 export default function CameraStats({ data, loading }: CameraStatsProps) {
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-bold text-gray-900">구간별 알림현황</h2>
+        <h2 className="font-bold text-gray-900 dark:text-white">구간별 알림현황</h2>
         <button className="flex items-center gap-1 text-xs text-[#4B73F7] hover:underline">
           <MapPin className="w-3 h-3" />
           지도보기
@@ -52,7 +52,7 @@ export default function CameraStats({ data, loading }: CameraStatsProps) {
       {loading ? (
         <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-8 bg-gray-100 rounded animate-pulse" />
+            <div key={i} className="h-8 bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
           ))}
         </div>
       ) : data.length === 0 ? (
@@ -62,7 +62,7 @@ export default function CameraStats({ data, loading }: CameraStatsProps) {
       ) : (
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-xs text-gray-400 border-b border-gray-100">
+            <tr className="text-xs text-gray-400 dark:text-gray-500 border-b border-gray-100 dark:border-gray-700">
               <th className="text-left pb-2 font-medium">역이름</th>
               <th className="text-right pb-2 font-medium">알림현황</th>
             </tr>
@@ -71,11 +71,11 @@ export default function CameraStats({ data, loading }: CameraStatsProps) {
             {data.map((row) => (
               <tr
                 key={row.camera_id}
-                className="border-b border-gray-50 last:border-0"
+                className="border-b border-gray-50 dark:border-gray-700 last:border-0"
               >
-                <td className="py-2.5 text-gray-700">
+                <td className="py-2.5 text-gray-700 dark:text-gray-300">
                   <div className="font-medium">{row.station_name}</div>
-                  <div className="text-xs text-gray-400">{row.location}</div>
+                  <div className="text-xs text-gray-400 dark:text-gray-500">{row.location}</div>
                 </td>
                 <td className="py-2.5 text-right">
                   <span

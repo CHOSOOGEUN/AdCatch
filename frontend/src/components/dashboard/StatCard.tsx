@@ -16,14 +16,14 @@ export default function StatCard({
   bg,
 }: StatCardProps) {
   return (
-    <div className="flex items-center gap-5 bg-white rounded-2xl px-6 py-5 flex-1 shadow-sm">
+    <div className="flex items-center justify-center lg:justify-start gap-4 bg-white dark:bg-gray-800 rounded-2xl px-3 lg:px-6 py-4 lg:py-5 flex-1 shadow-sm">
       <span
-        className={`text-4xl font-bold ${color} ${bg} w-16 h-16 rounded-full flex items-center justify-center shrink-0`}
+        className={`text-2xl lg:text-4xl font-bold ${color} ${bg} w-12 h-12 lg:w-16 lg:h-16 rounded-full flex items-center justify-center shrink-0`}
       >
         {count}
       </span>
-      <div>
-        <p className="text-lg font-bold text-gray-900">{label}</p>
+      <div className="hidden lg:block">
+        <p className="text-lg font-bold text-gray-900 dark:text-white">{label}</p>
         <p className="text-sm text-gray-400 mt-0.5">{sub}</p>
       </div>
     </div>

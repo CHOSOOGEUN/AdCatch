@@ -34,9 +34,9 @@ export default function AlertList({
     <div className="flex-1 min-w-0">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-bold text-gray-900">최신알림</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">최신알림</h2>
           {unconfirmedCount > 0 && (
-            <span className="text-sm text-gray-400">
+            <span className="text-sm text-gray-400 dark:text-gray-500">
               미확인 {unconfirmedCount}건
             </span>
           )}
@@ -51,7 +51,7 @@ export default function AlertList({
           {[...Array(3)].map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl px-5 py-4 shadow-sm animate-pulse h-24"
+              className="bg-white dark:bg-gray-800 rounded-2xl px-5 py-4 shadow-sm animate-pulse h-24"
             />
           ))}
         </div>

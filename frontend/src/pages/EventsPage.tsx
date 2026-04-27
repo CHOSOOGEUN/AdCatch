@@ -197,11 +197,11 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <div className="flex flex-col flex-1 min-w-0">
         <Header />
-        <main className="flex-1 p-6 space-y-4">
+        <main className="flex-1 p-3 sm:p-6 space-y-4">
           {/* 필터 바 */}
           <EventsFilter
             filters={filters}
@@ -216,7 +216,6 @@ export default function EventsPage() {
             allFilteredEvents={filteredEvents}
             loading={loading}
             onDetail={setSelectedEvent}
-            onFalseAlarm={handleOpenFalseAlarm}
           />
 
           {/* 페이지네이션 */}

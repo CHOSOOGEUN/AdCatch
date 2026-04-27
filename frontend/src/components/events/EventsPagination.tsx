@@ -56,9 +56,9 @@ export default function EventsPagination({
   const pageNumbers = getPageNumbers(page, totalPages);
 
   return (
-    <div className="flex items-center justify-between py-1">
+    <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-0 sm:justify-between py-1">
       {/* 좌측: 건수 표시 */}
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-500 dark:text-gray-400 hidden sm:block">
         총 {total}건 중 {startItem}-{endItem} 표시
       </p>
 
@@ -67,7 +67,7 @@ export default function EventsPagination({
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
-          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 disabled:opacity-30 transition text-gray-600"
+          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 transition text-gray-600 dark:text-gray-400"
         >
           <ChevronLeft className="w-4 h-4" />
           <span className="sr-only">이전</span>
@@ -88,7 +88,7 @@ export default function EventsPagination({
               className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium transition ${
                 p === page
                   ? "bg-[#4B73F7] text-white"
-                  : "text-gray-600 hover:bg-gray-100"
+                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
               {p}
@@ -99,7 +99,7 @@ export default function EventsPagination({
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
-          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 disabled:opacity-30 transition text-gray-600"
+          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 transition text-gray-600 dark:text-gray-400"
         >
           <ChevronRight className="w-4 h-4" />
           <span className="sr-only">다음</span>
@@ -107,7 +107,7 @@ export default function EventsPagination({
       </div>
 
       {/* 우측: 페이지당 건수 */}
-      <div className="flex items-center gap-1.5 text-sm text-gray-500">
+      <div className="hidden sm:flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
         <span>페이지당</span>
         <div className="relative">
           <select
@@ -116,7 +116,7 @@ export default function EventsPagination({
               onPageSizeChange(Number(e.target.value));
               onPageChange(1);
             }}
-            className="appearance-none bg-white border border-gray-200 rounded-lg pl-3 pr-6 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#4B73F7] cursor-pointer"
+            className="appearance-none bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg pl-3 pr-6 py-1 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4B73F7] cursor-pointer"
           >
             {PAGE_SIZE_OPTIONS.map((s) => (
               <option key={s} value={s}>

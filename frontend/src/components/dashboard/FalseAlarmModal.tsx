@@ -79,17 +79,17 @@ export default function FalseAlarmModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4"
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="font-bold text-gray-900 text-lg">오탐신고</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h2 className="font-bold text-gray-900 dark:text-white text-lg">오탐신고</h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition"
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </button>
         </div>
 
@@ -109,14 +109,14 @@ export default function FalseAlarmModal({
 
         <div className="px-6 py-5 space-y-4">
           {/* 이벤트 요약 */}
-          <div className="bg-gray-50 rounded-xl px-4 py-3">
-            <p className="text-sm font-medium text-gray-800">{locationText}</p>
-            <p className="text-xs mt-0.5 text-gray-400">이벤트 #{event.id}</p>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-xl px-4 py-3">
+            <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{locationText}</p>
+            <p className="text-xs mt-0.5 text-gray-400 dark:text-gray-400">이벤트 #{event.id}</p>
           </div>
 
           {/* 오탐 사유 선택 */}
           <div className="space-y-2.5">
-            <p className="text-sm font-semibold text-gray-800">오탐 사유</p>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">오탐 사유</p>
             {REASONS.map((reason) => (
               <label
                 key={reason}
@@ -130,7 +130,7 @@ export default function FalseAlarmModal({
                   onChange={() => setSelectedReason(reason)}
                   className="accent-[#4B73F7] w-4 h-4"
                 />
-                <span className="text-sm text-gray-700">{reason}</span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">{reason}</span>
               </label>
             ))}
           </div>
@@ -142,7 +142,7 @@ export default function FalseAlarmModal({
               onChange={(e) => setMemo(e.target.value)}
               placeholder="사유를 직접 입력해주세요."
               rows={3}
-              className="w-full px-4 py-2.5 rounded-xl bg-gray-100 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4B73F7] resize-none"
+              className="w-full px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4B73F7] resize-none"
             />
           )}
 
@@ -160,7 +160,7 @@ export default function FalseAlarmModal({
           </button>
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 rounded-full border border-gray-200 text-gray-500 font-semibold text-sm hover:bg-gray-50 transition"
+            className="flex-1 py-2.5 rounded-full border border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition"
           >
             취소
           </button>

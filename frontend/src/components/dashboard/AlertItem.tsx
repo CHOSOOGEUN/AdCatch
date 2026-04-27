@@ -73,7 +73,7 @@ export default function AlertItem({
   const isActive = event.status === "pending";
 
   return (
-    <div className="flex items-center gap-4 bg-white rounded-2xl px-5 py-4 shadow-sm">
+    <div className="flex items-start sm:items-center gap-3 sm:gap-4 bg-white dark:bg-gray-800 rounded-2xl px-4 sm:px-5 py-4 shadow-sm">
       {/* 카메라 썸네일 */}
       <div className="relative shrink-0">
         <div className="w-16 h-16 rounded-xl bg-gray-800 flex items-center justify-center text-white text-xs font-bold">
@@ -89,25 +89,25 @@ export default function AlertItem({
       {/* 내용 */}
       <div className="flex-1 min-w-0 pl-1">
         <div className="flex items-center gap-2 mb-0.5">
-          <span className="font-bold text-gray-900 text-sm">
+          <span className="font-bold text-gray-900 dark:text-white text-sm">
             {getLocationLabel(event)}
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-gray-400 dark:text-gray-500">
             {formatTime(event.timestamp)}
           </span>
         </div>
-        <p className="text-sm text-gray-700 mb-1.5">{getDescription(event)}</p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mb-1.5">{getDescription(event)}</p>
         <div className="flex gap-1.5 flex-wrap">
           {event.appearance_tags?.map((tag) => (
             <span
               key={tag}
-              className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full"
+              className="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full"
             >
               {tag}
             </span>
           ))}
           {event.confidence !== null && (
-            <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+            <span className="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
               신뢰도 {Math.round((event.confidence ?? 0) * 100)}%
             </span>
           )}
@@ -115,18 +115,18 @@ export default function AlertItem({
       </div>
 
       {/* 버튼 */}
-      <div className="flex flex-col gap-1.5 shrink-0">
+      <div className="flex flex-row sm:flex-col gap-1.5 shrink-0">
         {isActive ? (
           <>
             <button
               onClick={() => onDetail(event)}
-              className="px-4 py-1.5 rounded-full bg-[#4B73F7] text-white text-sm font-medium hover:bg-[#3a62e6] transition"
+              className="px-3 sm:px-4 py-1.5 rounded-full bg-[#4B73F7] text-white text-xs sm:text-sm font-medium hover:bg-[#3a62e6] transition"
             >
               상세보기
             </button>
             <button
               onClick={() => onFalseAlarm(event)}
-              className="px-4 py-1.5 rounded-full border border-[#4B73F7] text-[#4B73F7] text-sm font-medium hover:bg-blue-50 transition"
+              className="px-3 sm:px-4 py-1.5 rounded-full border border-[#4B73F7] text-[#4B73F7] text-xs sm:text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
             >
               오탐신고
             </button>
@@ -134,7 +134,7 @@ export default function AlertItem({
         ) : (
           <button
             onClick={() => onDetail(event)}
-            className="px-4 py-1.5 rounded-full border border-[#4B73F7] text-[#4B73F7] text-sm font-medium hover:bg-blue-50 transition"
+            className="px-3 sm:px-4 py-1.5 rounded-full border border-[#4B73F7] text-[#4B73F7] text-xs sm:text-sm font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
           >
             기록보기
           </button>

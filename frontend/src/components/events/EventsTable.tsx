@@ -32,7 +32,6 @@ interface EventsTableProps {
   allFilteredEvents: EventResponse[];
   loading?: boolean;
   onDetail: (event: EventResponse) => void;
-  onFalseAlarm: (event: EventResponse) => void;
 }
 
 // ── 유틸 ──────────────────────────────────────────────
@@ -104,17 +103,17 @@ function exportToCSV(events: EventResponse[]) {
 
 // ── 컴포넌트 ──────────────────────────────────────────
 
-const COLUMNS = [
-  "#",
-  "발생시각",
-  "역/게이트",
-  "감지유형",
-  "심각도",
-  "인상착의",
-  "카메라",
-  "상태",
-  "담당자",
-  "대응",
+const COLUMNS: { label: string; cls?: string }[] = [
+  { label: "#" },
+  { label: "발생시각" },
+  { label: "역/게이트" },
+  { label: "감지유형", cls: "hidden sm:table-cell" },
+  { label: "심각도" },
+  { label: "인상착의", cls: "hidden lg:table-cell" },
+  { label: "카메라", cls: "hidden sm:table-cell" },
+  { label: "상태" },
+  { label: "담당자", cls: "hidden md:table-cell" },
+  { label: "대응" },
 ];
 
 export default function EventsTable({
@@ -122,30 +121,29 @@ export default function EventsTable({
   allFilteredEvents,
   loading,
   onDetail,
-  onFalseAlarm,
 }: EventsTableProps) {
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-6 space-y-3">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 space-y-3">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-12 bg-gray-100 rounded animate-pulse" />
+          <div key={i} className="h-12 bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-100">
-              {COLUMNS.map((col) => (
+            <tr className="border-b border-gray-100 dark:border-gray-700">
+              {COLUMNS.map(({ label, cls }) => (
                 <th
-                  key={col}
-                  className="px-4 py-4 text-left text-xs font-semibold text-[#4B73F7] whitespace-nowrap"
+                  key={label}
+                  className={`px-4 py-4 text-left text-xs font-semibold text-[#4B73F7] whitespace-nowrap bg-white dark:bg-gray-800 ${cls ?? ""}`}
                 >
-                  {col}
+                  {label}
                 </th>
               ))}
             </tr>
@@ -155,7 +153,7 @@ export default function EventsTable({
             {events.length === 0 ? (
               <tr>
                 <td
-                  colSpan={COLUMNS.length}
+                  colSpan={10}
                   className="px-4 py-16 text-center text-sm text-gray-400"
                 >
                   이벤트가 없습니다.
@@ -180,7 +178,7 @@ export default function EventsTable({
                 return (
                   <tr
                     key={event.id}
-                    className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
+                    className="border-b border-gray-50 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     {/* # */}
                     <td className="px-4 py-4 whitespace-nowrap">
@@ -190,27 +188,27 @@ export default function EventsTable({
                             isActive ? "bg-red-500" : "bg-gray-300"
                           }`}
                         />
-                        <span className="font-medium text-gray-700">
+                        <span className="font-medium text-gray-700 dark:text-gray-300">
                           EV-{String(event.id).padStart(4, "0")}
                         </span>
                       </div>
                     </td>
 
                     {/* 발생시각 */}
-                    <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
+                    <td className="px-4 py-4 text-gray-600 dark:text-gray-400 whitespace-nowrap">
                       {formatTime(event.timestamp)}
                     </td>
 
                     {/* 역/게이트 */}
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="font-medium text-gray-800">{station}</div>
+                      <div className="font-medium text-gray-800 dark:text-gray-200">{station}</div>
                       {gate && (
-                        <div className="text-xs text-gray-400">{gate}</div>
+                        <div className="text-xs text-gray-400 dark:text-gray-500">{gate}</div>
                       )}
                     </td>
 
                     {/* 감지유형 */}
-                    <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
+                    <td className="hidden sm:table-cell px-4 py-4 text-gray-600 dark:text-gray-400 whitespace-nowrap">
                       {detectionType}
                     </td>
 
@@ -224,12 +222,12 @@ export default function EventsTable({
                     </td>
 
                     {/* 인상착의 */}
-                    <td className="px-4 py-4 text-gray-600 max-w-[180px]">
+                    <td className="hidden lg:table-cell px-4 py-4 text-gray-600 dark:text-gray-400 max-w-[180px]">
                       <span className="line-clamp-2">{appearance}</span>
                     </td>
 
                     {/* 카메라 */}
-                    <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
+                    <td className="hidden sm:table-cell px-4 py-4 text-gray-600 dark:text-gray-400 whitespace-nowrap">
                       {camLabel}
                     </td>
 
@@ -239,7 +237,7 @@ export default function EventsTable({
                     </td>
 
                     {/* 담당자 */}
-                    <td className="px-4 py-4 text-gray-500 whitespace-nowrap">
+                    <td className="hidden md:table-cell px-4 py-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">
                       {event.assigned_to ?? "—"}
                     </td>
 
@@ -248,7 +246,7 @@ export default function EventsTable({
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => onDetail(event)}
-                          className={`font-medium ${isActive ? "text-gray-700 hover:text-gray-900" : "text-gray-400 hover:text-gray-600"}`}
+                          className={`font-medium ${isActive ? "text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white" : "text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"}`}
                         >
                           {isActive ? "상세" : "기록"}
                         </button>
@@ -267,10 +265,10 @@ export default function EventsTable({
 
       {/* 액셀 내보내기 */}
       {allFilteredEvents.length > 0 && (
-        <div className="flex justify-end px-5 py-3 border-t border-gray-50">
+        <div className="flex justify-end px-5 py-3 border-t border-gray-50 dark:border-gray-700">
           <button
             onClick={() => exportToCSV(allFilteredEvents)}
-            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition"
+            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition"
           >
             액셀 내보내기
             <Download className="w-4 h-4" />

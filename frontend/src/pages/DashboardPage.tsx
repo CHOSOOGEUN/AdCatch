@@ -147,17 +147,17 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <div className="flex flex-col flex-1 min-w-0">
         <Header />
-        <main className="flex-1 p-6 space-y-5">
+        <main className="flex-1 p-3 sm:p-6 space-y-4 sm:space-y-5">
           {/* 통계 카드 */}
           <StatCards stats={stats} loading={loadingStats} />
 
           {/* 메인 콘텐츠 */}
-          <div className="flex gap-5 items-start">
-            {/* 좌측: 최신알림 */}
+          <div className="flex flex-col lg:flex-row gap-5 items-start">
+            {/* 최신알림 */}
             <AlertList
               events={events}
               loading={loadingEvents}
@@ -166,8 +166,8 @@ export default function DashboardPage() {
               onFalseAlarm={handleOpenFalseAlarm}
             />
 
-            {/* 우측: 구간별 알림현황 + 최근 오탐 신고 */}
-            <div className="w-[340px] shrink-0 space-y-4">
+            {/* lg 미만에서는 하단으로: 구간별 알림현황 + 최근 오탐 신고 */}
+            <div className="w-full lg:w-[340px] shrink-0 space-y-4">
               <CameraStats data={cameraStats} loading={loadingCamera} />
               <FalseAlarmList
                 notifications={notifications}
