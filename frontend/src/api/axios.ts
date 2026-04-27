@@ -9,12 +9,13 @@
  * ## 주의사항
  * - 모든 API 호출은 기본 axios 대신 이 인스턴스(api) 사용할 것
  * - 토큰 저장/삭제는 이 파일과 LoginPage.tsx에서만 처리할 것
+ * - baseURL은 VITE_API_BASE_URL 환경변수로 관리 (.env 파일 참고)
  */
 
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: import.meta.env.VITE_API_BASE_URL as string,
   headers: {
     "Content-Type": "application/json",
   },

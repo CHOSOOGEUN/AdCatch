@@ -5,7 +5,7 @@
  * ## 기능
  * - 10개 컬럼 테이블: #, 발생시각, 역/게이트, 감지유형, 심각도, 인상착의, 카메라, 상태, 담당자, 대응
  * - 심각도 3단계: confidence ≥ 0.7 → 고위험(빨강) / ≥ 0.4 → 중간(노랑) / < 0.4 → 낮음(초록)
- * - 상태별 대응 버튼: pending → 상세+오탐 / confirmed·false_alarm → 기록
+ * - 대응 컬럼: pending → "상세" 버튼 / confirmed → "기록" 버튼 / false_alarm → "기록" 버튼 + "오탐" 텍스트
  * - 액셀 내보내기: 필터링된 이벤트 전체를 UTF-8 BOM CSV로 다운로드 (엑셀 한글 정상 표시)
  * - loading 시 스켈레톤 / 빈 배열 시 안내 문구
  *
@@ -245,29 +245,17 @@ export default function EventsTable({
 
                     {/* 대응 */}
                     <td className="px-4 py-4 whitespace-nowrap">
-                      {isActive ? (
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => onDetail(event)}
-                            className="text-gray-700 hover:text-gray-900 font-medium"
-                          >
-                            상세
-                          </button>
-                          <button
-                            onClick={() => onFalseAlarm(event)}
-                            className="text-red-400 hover:text-red-600 font-medium"
-                          >
-                            오탐
-                          </button>
-                        </div>
-                      ) : (
+                      <div className="flex items-center gap-2">
                         <button
                           onClick={() => onDetail(event)}
-                          className="text-gray-400 hover:text-gray-600 font-medium"
+                          className={`font-medium ${isActive ? "text-gray-700 hover:text-gray-900" : "text-gray-400 hover:text-gray-600"}`}
                         >
-                          기록
+                          {isActive ? "상세" : "기록"}
                         </button>
-                      )}
+                        {event.status === "false_alarm" && (
+                          <span className="text-red-400 text-sm font-medium">오탐</span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );

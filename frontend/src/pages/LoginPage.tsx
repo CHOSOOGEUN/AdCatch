@@ -8,7 +8,6 @@
  * - 로그인 성공 시 /dashboard 이동
  *
  * ## 주의사항
- * - 테스트용 임시 초기값 (admin@gmail.com / 1234) 하드코딩 중 — 배포 전 제거 필요
  * - 회원가입·비밀번호 찾기 버튼은 UI만 존재, 기능 미구현
  */
 
@@ -19,9 +18,8 @@ import axios from "axios";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  // TODO: 테스트용 임시 초기값 — 배포 전 제거
-  const [email, setEmail] = useState("admin@gmail.com");
-  const [password, setPassword] = useState("1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);

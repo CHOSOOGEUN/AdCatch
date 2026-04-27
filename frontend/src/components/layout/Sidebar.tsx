@@ -2,6 +2,9 @@
  * @file Sidebar.tsx
  * @description 대시보드 사이드바 컴포넌트
  *
+ * ## 기능
+ * - AppContext의 unconfirmedCount > 0 이면 대시보드 메뉴 항목에 빨간 뱃지 표시 (최대 99+)
+ *
  * ## TODO
  * - [ ] 로고 이미지 파일 생기면 Shield 아이콘 → <img src="/logo.png" /> 로 교체
  */
@@ -14,6 +17,7 @@ import {
   Settings,
   Shield,
 } from "lucide-react";
+import { useAppContext } from "@/contexts/AppContext";
 
 const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "대시보드" },
@@ -23,6 +27,8 @@ const navItems = [
 ];
 
 export default function Sidebar() {
+  const { unconfirmedCount } = useAppContext();
+
   return (
     <aside className="w-64 min-h-screen bg-white border-r border-gray-100 flex flex-col">
       {/* 로고 */}
@@ -49,7 +55,12 @@ export default function Sidebar() {
             }
           >
             <Icon className="w-5 h-5" />
-            {label}
+            <span className="flex-1">{label}</span>
+            {to === "/dashboard" && unconfirmedCount > 0 && (
+              <span className="min-w-[20px] h-5 px-1.5 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center">
+                {unconfirmedCount > 99 ? "99+" : unconfirmedCount}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>

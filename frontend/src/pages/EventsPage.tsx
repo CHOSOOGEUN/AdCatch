@@ -4,21 +4,22 @@
  *
  * ## 기능
  * - GET /api/cameras/ + GET /api/events/?limit=500 병렬 호출 후 카메라 정보 조인
- * - 클라이언트사이드 필터: 텍스트 검색(역/게이트/인상착의/설명) / 기간 / 감지유형 / 카메라 / 상태 / 역
+ * - 클라이언트사이드 필터: 텍스트 검색(EV-번호/CAM-번호/역/게이트/인상착의/설명) / 기간 / 감지유형 / 카메라 / 상태 / 역
  * - 클라이언트사이드 페이지네이션: 기본 8건, 선택 가능 (8 / 16 / 32)
  * - EventDetailModal / FalseAlarmModal 재사용 (DashboardPage와 동일 컴포넌트)
  * - EventDetailModal에는 allEvents 전달 (필터된 배열 아님) — 모달 내 이전/다음 탐색을 위해
+ * - WebSocket NEW_EVENT 수신 시 카메라 정보 조인 후 allEvents 앞에 실시간 삽입
+ * - AppContext를 통해 wsConnected 상태 공유
  *
  * ## 주의사항
  * - 현재 클라이언트사이드 페이지네이션 (limit=500 fetch)
  *   → 이벤트 수 대규모 시 GET /api/events/?skip=N&limit=M 서버사이드로 전환 필요
  *
  * ## TODO
- * - [ ] WebSocket NEW_EVENT 수신 시 allEvents 앞에 삽입 (현재 초기 로드만)
  * - [ ] 서버사이드 페이지네이션 전환 (백엔드 skip/limit 파라미터 지원 확인 후)
  */
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import EventsFilter, {
@@ -31,13 +32,17 @@ import EventDetailModal from "@/components/dashboard/EventDetailModal";
 import FalseAlarmModal from "@/components/dashboard/FalseAlarmModal";
 import { getEvents } from "@/api/events";
 import { getCameras } from "@/api/cameras";
-import type { EventResponse } from "@/types";
+import { useWebSocket } from "@/hooks/useWebSocket";
+import { useAppContext } from "@/contexts/AppContext";
+import type { EventResponse, CameraResponse } from "@/types";
 
 export default function EventsPage() {
+  const { setWsConnected } = useAppContext();
   const [allEvents, setAllEvents] = useState<EventResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<EventFilters>(DEFAULT_FILTERS);
   const [page, setPage] = useState(1);
+  const cameraMapRef = useRef<Map<number, CameraResponse>>(new Map());
   const [pageSize, setPageSize] = useState(8);
   const [selectedEvent, setSelectedEvent] = useState<EventResponse | null>(null);
   const [falseAlarmEvent, setFalseAlarmEvent] = useState<EventResponse | null>(null);
@@ -50,19 +55,17 @@ export default function EventsPage() {
         getEvents({ limit: 500 }),
       ]);
 
-      // 카메라 맵 구성
-      const cameraMap = new Map(
-        camResult.status === "fulfilled"
-          ? camResult.value.map((c) => [c.id, c])
-          : [],
-      );
+      // 카메라 맵 구성 (WebSocket 핸들러에서도 참조하기 위해 ref에 저장)
+      if (camResult.status === "fulfilled") {
+        cameraMapRef.current = new Map(camResult.value.map((c) => [c.id, c]));
+      }
 
       // 이벤트에 카메라 정보 조인
       if (evResult.status === "fulfilled") {
         setAllEvents(
           evResult.value.map((e) => ({
             ...e,
-            camera: cameraMap.get(e.camera_id) ?? e.camera,
+            camera: cameraMapRef.current.get(e.camera_id) ?? e.camera,
           })),
         );
       }
@@ -77,6 +80,22 @@ export default function EventsPage() {
     fetchAll();
   }, [fetchAll]);
 
+  // WebSocket: 새 이벤트 실시간 수신
+  const { connected } = useWebSocket((msg) => {
+    if (msg.type === "NEW_EVENT") {
+      const newEvent = msg.data as EventResponse;
+      const enriched: EventResponse = {
+        ...newEvent,
+        camera: cameraMapRef.current.get(newEvent.camera_id) ?? newEvent.camera,
+      };
+      setAllEvents((prev) => [enriched, ...prev]);
+    }
+  });
+
+  useEffect(() => {
+    setWsConnected(connected);
+  }, [connected, setWsConnected]);
+
   const handleFiltersChange = (newFilters: EventFilters) => {
     setFilters(newFilters);
     setPage(1); // 필터 변경 시 1페이지로 리셋
@@ -85,16 +104,20 @@ export default function EventsPage() {
   // ── 클라이언트사이드 필터링 ──────────────────────────
   const filteredEvents = useMemo(() => {
     return allEvents.filter((e) => {
-      // 텍스트 검색: 역이름 / 게이트 / 인상착의
+      // 텍스트 검색: 이벤트 ID / 역이름 / 게이트 / 카메라 / 인상착의 / 설명
       if (filters.search) {
         const q = filters.search.toLowerCase();
+        const eventId = `ev-${String(e.id).padStart(4, "0")}`;
         const station = (e.camera?.station_name ?? "").toLowerCase();
         const gate = (e.camera?.location ?? "").toLowerCase();
+        const camLabel = `cam-${String(e.camera_id).padStart(2, "0")}`;
         const tags = (e.appearance_tags ?? []).join(" ").toLowerCase();
         const desc = (e.description ?? "").toLowerCase();
         if (
+          !eventId.includes(q) &&
           !station.includes(q) &&
           !gate.includes(q) &&
+          !camLabel.includes(q) &&
           !tags.includes(q) &&
           !desc.includes(q)
         ) {

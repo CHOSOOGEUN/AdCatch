@@ -17,12 +17,12 @@
  * - 백엔드 미구현 API (stats, stats/by-camera, false-alarm, status) 실패 시 null/빈 배열로 graceful fallback
  * - 401 응답은 axios interceptor가 자동으로 `/`로 리다이렉트 처리
  *
- * ## TODO
- * - [ ] 사이드바 미확인 뱃지 → Context 또는 props로 unconfirmedCount 전달
- * - [ ] Header 실시간 모니터링 뱃지 → useWebSocket connected 상태 연동
+ * ## 주의사항 (추가)
+ * - AppContext를 통해 wsConnected, unconfirmedCount를 Sidebar/Header에 공유
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useAppContext } from "@/contexts/AppContext";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import StatCards from "@/components/dashboard/StatCards";
@@ -44,6 +44,7 @@ import type {
 } from "@/types";
 
 export default function DashboardPage() {
+  const { setWsConnected, setUnconfirmedCount } = useAppContext();
   const [events, setEvents] = useState<EventResponse[]>([]);
   const [stats, setStats] = useState<EventStats | null>(null);
   const [cameraStats, setCameraStats] = useState<CameraEventStats[]>([]);
@@ -105,8 +106,8 @@ export default function DashboardPage() {
     refresh();
   }, [refresh]);
 
-  // WebSocket: 새 이벤트 실시간 수신
-  useWebSocket((msg) => {
+  // WebSocket 연결 상태 → AppContext 동기화
+  const { connected } = useWebSocket((msg) => {
     if (msg.type === "NEW_EVENT") {
       const newEvent = msg.data as EventResponse;
       // 카메라 정보 조인 후 목록 맨 앞 삽입, 최대 10건 유지
@@ -131,6 +132,14 @@ export default function DashboardPage() {
   const unconfirmedCount = events.filter(
     (e) => e.status === "pending",
   ).length;
+
+  useEffect(() => {
+    setWsConnected(connected);
+  }, [connected, setWsConnected]);
+
+  useEffect(() => {
+    setUnconfirmedCount(unconfirmedCount);
+  }, [unconfirmedCount, setUnconfirmedCount]);
 
   const handleOpenFalseAlarm = (event: EventResponse) => {
     setSelectedEvent(null);

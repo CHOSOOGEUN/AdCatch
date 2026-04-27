@@ -30,7 +30,7 @@ No test runner is configured yet.
 - `/dashboard` → `DashboardPage` ✅ 구현완료
 - `/stats` → `StatsPage` ⚠️ placeholder ("준비 중" 텍스트만)
 - `/events` → `EventsPage` ✅ 구현완료
-- `/settings` → Sidebar nav item 존재하나 **라우트 미등록**
+- `/settings` → `SettingsPage` ⚠️ placeholder ("준비 중" 텍스트만)
 
 ### Layout Pattern
 Dashboard pages share a consistent layout: `<Sidebar />` (left, fixed w-64) + `<Header />` (top) + `<main>` content. Assemble these manually in each page — no shared layout wrapper component.
@@ -46,8 +46,10 @@ Dashboard pages share a consistent layout: `<Sidebar />` (left, fixed w-64) + `<
 ### Component Organization
 - `src/components/layout/` — `Sidebar`, `Header`
 - `src/components/dashboard/` — `StatCards`, `StatCard`, `AlertList`, `AlertItem`, `CameraStats`, `FalseAlarmList`, `EventDetailModal`, `FalseAlarmModal`
+- `src/components/events/` — `EventsFilter`, `EventsTable`, `EventsPagination`
 - `src/components/ui/` — shadcn/ui primitives (generated via `npx shadcn add <component>`)
-- `src/hooks/` — `useWebSocket` (auto-reconnect, 3s delay, per-effect `let active` 패턴으로 StrictMode 이중 연결 방지)
+- `src/contexts/AppContext.tsx` — 전역 상태 (`wsConnected`, `unconfirmedCount`) — Header·Sidebar에서 읽고 DashboardPage·EventsPage에서 설정
+- `src/hooks/` — `useWebSocket` (auto-reconnect, 3s delay, `connected` 반환, per-effect `let active` 패턴)
 - `src/api/` — `axios.ts` (singleton), `events.ts`, `cameras.ts`, `notifications.ts`
 - `src/types/index.ts` — 앱 전체 공유 타입 (`EventResponse`, `EventStats`, `CameraEventStats`, `NotificationResponse`)
 
@@ -61,16 +63,23 @@ Dashboard pages share a consistent layout: `<Sidebar />` (left, fixed w-64) + `<
 
 ## Backend Integration
 
-- REST API base: `http://localhost:8000` (hardcoded in `src/api/axios.ts`) — always import from `@/api/axios`, never use raw `axios`
-- WebSocket: `ws://localhost:8000/ws/events` (hardcoded in `src/hooks/useWebSocket.ts`)
+- REST API base: `VITE_API_BASE_URL` 환경변수 (`src/api/axios.ts`) — always import from `@/api/axios`, never use raw `axios`
+- WebSocket: `VITE_WS_URL` 환경변수 (`src/hooks/useWebSocket.ts`)
+- 기본값은 `.env` 파일에 정의 (`http://localhost:8000`, `ws://localhost:8000/ws/events`)
 - Run the full stack with `docker-compose up -d` from the repo root (`/Users/ijihyeon/Desktop/GateGuard/`)
 
-### Backend M2 미구현 API (프론트 코드는 작성 완료, API 호출만 실패)
+### 구현된 API (Swagger 확인 완료)
+- `GET /api/cameras/` — 카메라 목록
+- `GET /api/events/` — 이벤트 목록
+- `PATCH /api/events/{event_id}/status` — 이벤트 상태 변경 (처리완료) ✅
+- `GET /api/notifications/` — 알림 목록 (인증 불필요)
+- `PATCH /api/notifications/{notification_id}/read` — 알림 읽음 처리
+
+### Backend M2 미구현 API (프론트 코드는 작성 완료, 호출 시 404 실패)
 이 API들은 실패해도 각 컴포넌트가 null/빈 배열로 graceful fallback 처리:
-- `GET /api/events/stats` → `EventStats`
-- `GET /api/events/stats/by-camera` → `CameraEventStats[]`
-- `POST /api/events/{id}/false-alarm` → 오탐신고
-- `PATCH /api/events/{id}/status` → 이벤트 상태 변경 (처리완료)
+- `GET /api/events/stats` → StatCards 데이터 (실패 시 카드 0으로 표시)
+- `GET /api/events/stats/by-camera` → CameraStats 테이블 (실패 시 빈 테이블)
+- `POST /api/events/{id}/false-alarm` → 오탐신고 (실패 시 신고 반영 안 됨)
 
 ## 구현 현황
 
@@ -88,20 +97,35 @@ Dashboard pages share a consistent layout: `<Sidebar />` (left, fixed w-64) + `<
   - FalseAlarmList — 최근 오탐 신고 5건
   - EventDetailModal — 좌측 실시간 알림 목록 + 우측 상세 정보 + 역무원파견/처리완료/오탐신고 버튼
   - FalseAlarmModal — 오탐 사유 선택 + 직접입력
-- EventsPage (전체 발생내역 — 필터/페이지네이션, EventDetailModal·FalseAlarmModal 재사용)
+- EventsPage (전체 발생내역 — 필터/페이지네이션, WebSocket 실시간 삽입, EventDetailModal·FalseAlarmModal 재사용)
+- SettingsPage placeholder (`/settings` 라우트 등록)
+- AppContext (`wsConnected`, `unconfirmedCount` 전역 공유)
+- Sidebar 미확인 뱃지 (unconfirmedCount > 0 시 빨간 동그라미)
+- Header WS 뱃지 (wsConnected 기반 on/off)
+- 환경변수 분리 (`VITE_API_BASE_URL`, `VITE_WS_URL`)
 
 ### ⚠️ 미구현 (우선순위 순)
 1. **Auth route guard** — 토큰 없으면 `/`로 리다이렉트 (현재 모든 라우트 인증 없이 접근 가능)
 2. **StatsPage** — ECharts 통계 시각화 (현재 placeholder)
-3. **Settings 라우트** — Sidebar에 항목은 있으나 `/settings` 라우트 미등록
-4. **Sidebar 미확인 뱃지** — `unconfirmedCount`가 DashboardPage에서 계산되나 Sidebar에 미전달
-5. **Header WebSocket 연결 상태 뱃지** — `useWebSocket`이 `connected` 상태를 반환하지 않아 뱃지가 항상 "실시간 모니터링 중"으로 표시됨
-6. **EventsPage WebSocket** — `NEW_EVENT` 수신 시 allEvents 앞에 삽입 미구현 (현재 초기 로드만)
-7. **환경변수 분리** — `axios.ts`의 baseURL과 `useWebSocket.ts`의 WS_URL이 하드코딩됨
-8. **테스트용 임시 자격증명** — `LoginPage.tsx`에 admin@gmail.com / 1234 초기값이 하드코딩됨 (배포 전 제거 필요)
+3. **SettingsPage** — 설정 기능 (현재 placeholder)
+
+### 로그인 현황 및 블로커
+현재 로그인이 불가능하며 두 가지 문제가 모두 해결되어야 함:
+1. **CORS 미해결** — 브라우저가 `POST /api/auth/login` 전 OPTIONS 프리플라이트 요청을 보내는데 백엔드가 `http://localhost:5173`을 허용하지 않아 400 반환. 실서버 연결 시 백엔드 `main.py`에 FastAPI `CORSMiddleware` 추가 필요 (`allow_origins=["http://localhost:5173"]`)
+2. **DB 미연결** — CORS 해결 후에도 DB가 연결되지 않으면 로그인 쿼리가 hang → `await api.post('/api/auth/login')` 무한 대기 → "로그인 중..." 무한 로딩
+- 로그인 없이 `/dashboard` 직접 접근 시 토큰 없음 → 보호된 API 401 반환 (정상 동작, Auth route guard로 해결 예정)
+
+### EventStatus 값
+백엔드 확정 상태값 3종: `pending` (미처리) | `confirmed` (처리완료) | `false_alarm` (오탐)
+- `pending` → 상세보기·오탐신고 버튼 활성화, 빨간 dot 표시
+- `confirmed` / `false_alarm` → 기록보기 버튼만 표시
+
+### EventStats API 응답 필드명
+`GET /api/events/stats` 응답: `today_total`, `pending`, `confirmed`, `false_alarm`
+(기존 `today_count`, `pending_count` 등과 다름 — 이미 `src/types/index.ts`에 반영 완료)
 
 ### 백엔드 확정 후 수정 필요
-- `appearance_tags`, `description` 필드명 백엔드 확정 필요
+- `appearance_tags`, `description`, `event_type`, `assigned_to` 필드 실제 응답 포함 여부
 - `POST /api/events/{id}/false-alarm` 요청 바디 필드명 (`reason`, `memo?`) 확정 필요
 - `NotificationResponse`에 `event` 필드 embed 여부 확인 필요
 - clip_url S3 CORS 설정 (백엔드 담당)

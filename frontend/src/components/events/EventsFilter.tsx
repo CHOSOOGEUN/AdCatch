@@ -3,13 +3,13 @@
  * @description 전체 발생내역 필터 바 컴포넌트
  *
  * ## 기능
- * - 텍스트 검색: 역이름 / 게이트이름 / 인상착의 대상 클라이언트사이드 필터링
+ * - 텍스트 검색: EV-번호 / CAM-번호 / 역이름 / 게이트이름 / 인상착의 / 설명 대상 실시간 필터링
  * - 기간 드롭다운: 전체 / 오늘 / 이번 주 / 이번 달
  * - 유형 드롭다운: event_type 또는 description 기반 필터링
  * - 카메라 드롭다운: 로드된 이벤트에서 추출한 CAM-XX 목록
- * - 상태 드롭다운: 미확인 / 처리완료 / 오탐
+ * - 상태 드롭다운: 미확인(pending) / 처리완료(confirmed) / 오탐(false_alarm)
  * - 역 드롭다운: 로드된 이벤트에서 추출한 역이름 목록
- * - 전체 버튼: 모든 필터 초기화
+ * - 초기화 버튼: 모든 필터 초기화
  *
  * ## 주의사항
  * - cameraOptions, stationOptions는 EventsPage에서 allEvents 기반으로 추출해서 전달
@@ -64,7 +64,7 @@ const TYPE_OPTIONS = [
 
 const STATUS_OPTIONS = [
   { value: "", label: "전체 상태" },
-  { value: "detected", label: "미확인" },
+  { value: "pending", label: "미확인" },
   { value: "confirmed", label: "처리완료" },
   { value: "false_alarm", label: "오탐" },
 ];
@@ -124,7 +124,7 @@ export default function EventsFilter({
           type="text"
           value={filters.search}
           onChange={(e) => update({ search: e.target.value })}
-          placeholder="역이름, 게이트이름, 인상착의 검색..."
+          placeholder="EV-번호, 역이름, 게이트, CAM-번호 검색..."
           className="pl-9 pr-4 py-2 rounded-full bg-white border border-gray-200 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4B73F7] w-72"
         />
       </div>
@@ -164,12 +164,12 @@ export default function EventsFilter({
         options={stationSelectOptions}
       />
 
-      {/* 전체 리셋 */}
+      {/* 필터 초기화 */}
       <button
         onClick={() => onChange(DEFAULT_FILTERS)}
         className="px-5 py-2 rounded-full bg-[#4B73F7] text-white text-sm font-semibold hover:bg-[#3a62e6] transition shrink-0"
       >
-        전체
+        초기화
       </button>
     </div>
   );

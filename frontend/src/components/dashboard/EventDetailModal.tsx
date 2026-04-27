@@ -322,20 +322,20 @@ export default function EventDetailModal({
                   </p>
                   <button
                     onClick={handleDispatch}
-                    className="w-full py-2.5 rounded-xl bg-yellow-400 text-white font-bold text-sm hover:bg-yellow-500 transition"
+                    className="w-full py-2.5 rounded-xl border border-yellow-400 bg-yellow-50 text-yellow-600 font-bold text-sm hover:bg-yellow-100 transition"
                   >
                     역무원 파견
                   </button>
                   <button
                     onClick={handleConfirm}
                     disabled={confirming}
-                    className="w-full py-2.5 rounded-xl bg-green-500 text-white font-bold text-sm hover:bg-green-600 transition disabled:opacity-60"
+                    className="w-full py-2.5 rounded-xl border border-green-500 bg-green-50 text-green-600 font-bold text-sm hover:bg-green-100 transition disabled:opacity-60"
                   >
                     {confirming ? "처리 중..." : "처리완료"}
                   </button>
                   <button
                     onClick={() => onFalseAlarm(selected)}
-                    className="w-full py-2.5 rounded-xl bg-red-400 text-white font-bold text-sm hover:bg-red-500 transition"
+                    className="w-full py-2.5 rounded-xl border border-red-400 bg-red-50 text-red-500 font-bold text-sm hover:bg-red-100 transition"
                   >
                     오탐신고
                   </button>
