@@ -124,12 +124,14 @@ jobs:
             echo "✅ 배포 완료: $(date)"
 
       - name: Notify Deployment Success
-        if: success()
+        if: success() && env.DISCORD_WEBHOOK_URL != ''
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           curl -H "Content-Type: application/json" \
           -X POST \
           -d "{\"content\": \"🚀 **GateGuard 배포 성공!**\n🔗 접속 주소: <https://gateguardsystems.com>\n📅 완료 시간: $(date)\"}" \
-          ${{ secrets.DISCORD_WEBHOOK_URL }}
+          "$DISCORD_WEBHOOK_URL"
 
   # ─────────────────────────────────────────
   # 3. 프론트엔드 빌드 & 정적 호스팅 (master push 시만)
@@ -159,6 +161,15 @@ jobs:
           npm ci
           npm run build
 
+      - name: Clean target directory on EC2 (디렉토리는 유지, 안 파일만 비움)
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            rm -rf /var/www/gateguard/* /var/www/gateguard/.[!.]* || true
+
       - name: Upload dist to EC2 (/var/www/gateguard)
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -168,12 +179,13 @@ jobs:
           source: "frontend/dist/*"
           target: "/var/www/gateguard/"
           strip_components: 2
-          rm: true
 
       - name: Notify Frontend Deployment
-        if: success()
+        if: success() && env.DISCORD_WEBHOOK_URL != ''
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           curl -H "Content-Type: application/json" \
           -X POST \
           -d "{\"content\": \"🌐 **GateGuard 프론트엔드 배포 성공!**\n🔗 <https://gateguardsystems.com>\n📅 $(date)\"}" \
-          ${{ secrets.DISCORD_WEBHOOK_URL }}
+          "$DISCORD_WEBHOOK_URL"
