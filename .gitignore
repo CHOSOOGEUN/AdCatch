@@ -40,3 +40,10 @@ dist/
 *.pth
 *.onnx
 weights/
+
+# Secrets / Credentials
+Secrets/
+*.pem
+*.p8
+*.p12
+*.key
