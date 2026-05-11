@@ -45,6 +45,7 @@ class EventCreate(BaseModel):
     clip_url: Optional[str] = None
     track_id: Optional[int] = None
     confidence: Optional[float] = None
+    event_type: Optional[str] = None
 
 
 class EventResponse(BaseModel):
@@ -55,6 +56,7 @@ class EventResponse(BaseModel):
     track_id: Optional[int]
     confidence: Optional[float]
     status: str
+    event_type: str
     handled_by: Optional[int]
     handled_at: Optional[datetime]
 
