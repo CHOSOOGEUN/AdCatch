@@ -77,7 +77,7 @@ async def get_event_stats(
     today_total = await db.scalar(select(func.count(Event.id)).where(Event.timestamp >= start_of_day))
     pending_count = await db.scalar(select(func.count(Event.id)).where(Event.status == 'pending'))
     confirmed_count = await db.scalar(select(func.count(Event.id)).where(Event.status == 'confirmed'))
-    false_alarm_count = await db.scalar(select(func.count(Event.id)).where(Event.status == 'dismissed'))
+    false_alarm_count = await db.scalar(select(func.count(Event.id)).where(Event.status == 'false_alarm'))
     
     return {
         "today_total": today_total or 0,
@@ -122,7 +122,8 @@ async def create_event(
     - AI 추론 엔진(inference.py)에서 호출됩니다.
     """
     # 1. DB에 사건 기록 (Persistence)
-    event = Event(**body.model_dump())
+    # exclude_none: 비전송 필드는 모델 default 가 적용되도록 (event_type → 'unknown')
+    event = Event(**body.model_dump(exclude_none=True))
     db.add(event)
     await db.flush()
 
@@ -159,7 +160,8 @@ async def report_false_alarm(
     if not event:
         raise HTTPException(status_code=404, detail="해당 사건 기록을 찾을 수 없습니다.")
         
-    event.status = "dismissed"
+    event.status = "false_alarm"
+    event.reason = body.reason
     event.handled_by = current_admin.id
     event.handled_at = datetime.now()
     
